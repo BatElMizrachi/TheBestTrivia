@@ -1,5 +1,4 @@
 
-        
         body {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 80%;
@@ -35,12 +34,12 @@ ul {
 #menu li a {
 	text-decoration: none;
 	height: 32px;
-  	voice-family: "\"; 
   	voice-family: inherit;
   	height: 24px;
 	}
 	
-#menu li a:link, #menu li a:visited {
+#menu li a:link, #menu li a:visited 
+{
 	color: #777;
 	display: block;
 	background: url(menu.gif);
@@ -49,12 +48,21 @@ ul {
 	
 #menu li a:hover {
 	color: #257EB7;
-	background: url(menu.gif) 0 -32px;
+	background: url(menu.gif);
 	padding: 8px 0 0 25px;
 	}
 	
 #menu li a:active {
 	color: #fff;
-	background: url(menu.gif) 0 -64px;
+	background: url(menu.gif);
 	padding: 8px 0 0 25px;
 	}
+        
+ #Category
+ {
+     background-color: lightgrey;
+            width: 100%;
+            padding: 10px;
+            margin: 10px;
+            display: inline-block;
+ }
