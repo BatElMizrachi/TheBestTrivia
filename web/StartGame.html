@@ -6,24 +6,29 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Start Game</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="StyleSheet.css" rel="stylesheet" type="text/css"/>
+        <link href="Style/bootstrap-theme.min.css" rel="stylesheet" type="text/css"/>
+        <link href="Style/bootstrap-theme.css" rel="stylesheet" type="text/css"/>
+        <link href="Style/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="Style/bootstrap.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <FORM ACTION="StartGame">
-            <div id="Category">
+            <nav class="navbar navbar-default" role="navigation">
+            <div>
                 <span><input type="checkbox" name="Category" value="Food" />Food </span>
-                <span style="display: inline-block"><img src="Food.png" alt=""/></span>
+                <span style="display: inline-block"><img src="Food.png" alt="Brand" style="width:30px;height:30px"/></span>
                 
-                <ol style="display: inline-block">
+                <ol class="list-group" style="display: inline-block">
                     <li style="list-style-type: none"><input type="radio" name="LevelFood" value="Easy" />Easy </li>
                     <li style="list-style-type: none"><input type="radio" name="LevelFood" value="Medium" />Medium </li>
                     <li style="list-style-type: none"><input type="radio" name="LevelFood" value="Difficult" />Difficult </li>
                  </ol>
             </div>
-            <div id="Category">
+            </nav>
+            <div class="navbar navbar-default" role="navigation">
                 <span><input type="checkbox" name="Category" value="Sport" />Sport</span>
                 <span><img src="Food.png" alt=""/></span>
                 <ol style="display: inline-block">
@@ -32,7 +37,7 @@ and open the template in the editor.
                     <li style="list-style-type: none"><input type="radio" name="LevelSport" value="Difficult" />Difficult </li>
                  </ol>
              </div> 
-            <div> <input type="submit" value="Play!" name="Play!" /></div>
+            <div> <input class="btn btn-default navbar-btn" type="submit" value="Play!" name="Play!" /></div>
             
         </form>
     </body>
