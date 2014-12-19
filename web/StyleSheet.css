@@ -1,0 +1,32 @@
+
+body{text-align:center;}
+
+#header{
+	height:100px;
+	background-color:#F3F2ED;
+	margin:0;
+	padding:0;
+	}
+	
+#header h1{
+	font-size:1em;
+	margin:0;
+	padding:10px;
+	}
+        
+        #Category 
+        {
+            background-color:black;
+    color:white;
+    margin:20px;
+    padding:20px;
+            display: inline-block;
+        }
+        
+#footer{
+	height:50px;
+	background:#BFBD93;
+	border-top:#FFFFFF 2px solid;
+	margin:0;
+	padding:0;
+	}
