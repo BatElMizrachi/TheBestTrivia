@@ -29,7 +29,7 @@ public class Utils
     {
         if(questionTypeName.equals("Yes/No"))
             return QuestionType.YesNo;
-        else if(questionTypeName.equals("MultiplePossible"))
+        else if(questionTypeName.equals("MultipleChoice"))
             return QuestionType.MultiplePossible;
         
         return QuestionType.Open;

@@ -8,7 +8,6 @@ public abstract class QuestionBase implements IQuestionBase, Serializable
     private String category;
     private String level;
     
-    public abstract void AskQuestion();
     public abstract QuestionType GetQuestionType();
     
     @Override
