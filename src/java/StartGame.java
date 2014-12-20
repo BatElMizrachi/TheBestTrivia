@@ -62,6 +62,7 @@ public class StartGame extends HttpServlet {
         
         //ערבוב נתונים
         Collections.shuffle(questions, new Random());
+        
         //הצגת שאלות
         
         

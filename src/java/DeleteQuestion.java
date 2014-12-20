@@ -4,8 +4,12 @@
  * and open the template in the editor.
  */
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,22 +33,56 @@ public class DeleteQuestion extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, FileNotFoundException {
+        
+        // הצגת כל השאלות
+         ArrayList<QuestionBase> allQuestions = new ArrayList<QuestionBase>();
+        try {
+            allQuestions = FileHandler.ReadQuestions();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DeleteQuestion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet DeleteQuestion</title>");            
+            out.println("<title>Show All Q</title>");   
+            out.println("<link href=\"Style/bootstrap-theme.min.css\" rel=\"stylesheet\" type=\"text/css\"/>");
+            out.println("<link href=\"Style/bootstrap-theme.css\" rel=\"stylesheet\" type=\"text/css\"/>");
+            out.println("<link href=\"Style/bootstrap.min.css\" rel=\"stylesheet\" type=\"text/css\"/>");
+            out.println("<link href=\"Style/bootstrap.css\" rel=\"stylesheet\" type=\"text/css\"/>)");
+
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet DeleteQuestion at " + request.getContextPath() + "</h1>");
+            out.println(ShowForDelete(allQuestions));
             out.println("</body>");
             out.println("</html>");
         }
     }
 
+    protected String ShowForDelete ( ArrayList<QuestionBase> allQuestions)
+    {
+        String listQuestion = "<div class=\"panel panel-info\">List of question</div>";
+        listQuestion += "<ul class=\"list-group\">";
+        int index = 1;
+
+        for (QuestionBase question : allQuestions) 
+        {
+            listQuestion+= "<li class=\"list-group-item\">" + question.GetQuestion() + "</li>";
+            index++;
+        }
+        
+        listQuestion += "</ul>";
+        if (index == 1)
+            return "<div class=\"alert alert-danger\" role=\"alert\">There are no questions</div>";
+        
+        return listQuestion;
+    }
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
