@@ -53,11 +53,9 @@ public class DeleteQuestion extends HttpServlet {
             out.println("<link href=\"Style/bootstrap-theme.min.css\" rel=\"stylesheet\" type=\"text/css\"/>");
             out.println("<link href=\"Style/bootstrap-theme.css\" rel=\"stylesheet\" type=\"text/css\"/>");
             out.println("<link href=\"Style/bootstrap.min.css\" rel=\"stylesheet\" type=\"text/css\"/>");
-            out.println("<link href=\"Style/bootstrap.css\" rel=\"stylesheet\" type=\"text/css\"/>)");
-
+            out.println("<link href=\"Style/bootstrap.css\" rel=\"stylesheet\" type=\"text/css\"/>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet DeleteQuestion at " + request.getContextPath() + "</h1>");
             out.println(ShowForDelete(allQuestions));
             out.println("</body>");
             out.println("</html>");

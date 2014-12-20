@@ -17,10 +17,9 @@ and open the template in the editor.
     <body>
         <FORM ACTION="StartGame">
             <nav class="navbar navbar-default" role="navigation">
-            <div>
+            <div class="input-group">
                 <span><input type="checkbox" name="Category" value="Food" />Food </span>
-                <span style="display: inline-block"><img src="Food.png" alt="Brand" style="width:30px;height:30px"/></span>
-                
+                <span style="display: inline-block"><img src="Pic/Food (1).jpg" alt=""/></span>
                 <ol class="list-group" style="display: inline-block">
                     <li style="list-style-type: none"><input type="radio" name="LevelFood" value="Easy" />Easy </li>
                     <li style="list-style-type: none"><input type="radio" name="LevelFood" value="Medium" />Medium </li>
@@ -30,13 +29,30 @@ and open the template in the editor.
             </nav>
             <div class="navbar navbar-default" role="navigation">
                 <span><input type="checkbox" name="Category" value="Sport" />Sport</span>
-                <span><img src="Food.png" alt=""/></span>
+                <span><img class="picCategory" src="Pic/sport.jpg" alt=""/></span>
                 <ol style="display: inline-block">
                     <li style="list-style-type: none"><input type="radio" name="LevelSport" value="Easy" />Easy </li>
                     <li style="list-style-type: none"><input type="radio" name="LevelSport" value="Medium" />Medium </li>
                     <li style="list-style-type: none"><input type="radio" name="LevelSport" value="Difficult" />Difficult </li>
                  </ol>
              </div> 
+            
+            <div class="Category">
+                <span><input type="checkbox" name="Category" value="History" /></span> 
+                <span>History</span>
+                <ol>
+                    <li><input type="radio" name="LevelHistory" value="Easy" />Easy</li>
+                    <li><input type="radio" name="LevelHistory" value="Medium" />Medium</li> 
+                    <li><input type="radio" name="LevelHistory" value="Difficult" />Difficult</li> 
+                </ol>
+                <span>
+                <img src="Pic/History.jpg" alt=""/>
+                </span>
+                
+            
+            
+            
+            
             <div> <input class="btn btn-default navbar-btn" type="submit" value="Play!" name="Play!" /></div>
             
         </form>
