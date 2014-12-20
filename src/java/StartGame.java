@@ -4,10 +4,17 @@
  * and open the template in the editor.
  */
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,9 +38,31 @@ public class StartGame extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException 
+            throws ServletException, IOException, FileNotFoundException, ClassNotFoundException 
     {
+        //טעינת הקטגוריות שהמשתש בחר
+        //טעינת הרמות קושי לכל קטגוריה
+        // צריך ולוודא שלקטגוריה סומן רמה
+        HashMap<String,String> CategoriesLevel = GetCategoriesLevelByUserChoose(request,response);
         
+        // טעינת השאלות
+        ArrayList<QuestionBase> allQuestions = new ArrayList<QuestionBase>();
+        allQuestions = FileHandler.ReadQuestions();
+
+        //הכנסת השאלות המתאימות לאוביקט
+        ArrayList<QuestionBase> questions = new ArrayList<QuestionBase>();
+        for (QuestionBase question : allQuestions) 
+        {
+            if ((CategoriesLevel.containsKey(question.GetCategory()))
+                    && (CategoriesLevel.containsValue(question.GetLevel())))
+            {
+                questions.add(question);
+            }
+        }
+        
+        //ערבוב נתונים
+        Collections.shuffle(questions, new Random());
+        //הצגת שאלות
         
         
         response.setContentType("text/html;charset=UTF-8");
@@ -45,27 +74,28 @@ public class StartGame extends HttpServlet {
             out.println("<title>Servlet StartGame</title>");            
             out.println("</head>");
             out.println("<body>");
-     GetCategoriesByUserChoose(request,response);
+     
             out.println("<h1>Servlet StartGame at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
     
-    protected String[] GetCategoriesByUserChoose(HttpServletRequest request, HttpServletResponse response)
+    protected HashMap<String,String> GetCategoriesLevelByUserChoose(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
        // ArrayList<String,String> categoryLevelUser = new ArrayList<String,String>();
+        HashMap<String,String> categoryLevelUser = new HashMap<String,String>();
         String[] category = request.getParameterValues("Category");
         String categoryLevel;
         
         for (int i = 0; i < category.length; i++) 
         {
             categoryLevel = "Level" + category[i];
-            request.getParameter(categoryLevel);
+            categoryLevelUser.put(category[i], request.getParameter(categoryLevel)) ;
         }
         
-        return category;
+        return categoryLevelUser;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -79,8 +109,12 @@ public class StartGame extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+            throws ServletException, IOException, FileNotFoundException {
+        try {
+            processRequest(request, response);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(StartGame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -94,7 +128,13 @@ public class StartGame extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(StartGame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(StartGame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
