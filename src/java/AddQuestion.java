@@ -14,34 +14,10 @@ public class AddQuestion extends HttpServlet {
             throws ServletException, IOException 
     {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet NewServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet NewServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    private void QuestionView(PrintWriter out)
-    {
-        out.println("<h1>Insert question:</h1>");
-        out.println("<br>");
-        out.println("<input type=\"text\" name=\"question\">");
-    }
-    
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
-        Level lavel = Utils.GetLevelByUserChoose((String) request.getAttribute("Level"));
-        Category category = Utils.GetCategoryByUserChoose((String) request.getAttribute("Category"));
-        QuestionType questionType = Utils.GetQuestionTypeByUserChoose((String) request.getAttribute("QuestionType"));
+        
+        Level lavel = Utils.GetLevelByUserChoose((String) request.getParameter("Level"));
+        Category category = Utils.GetCategoryByUserChoose((String) request.getParameter("Category"));
+        QuestionType questionType = Utils.GetQuestionTypeByUserChoose((String) request.getParameter("QuestionType"));
           
         try (PrintWriter out = response.getWriter()) 
         {
@@ -75,6 +51,20 @@ public class AddQuestion extends HttpServlet {
             out.println("</body>");
             out.println("</html>");
         }
+    }
+
+    private void QuestionView(PrintWriter out)
+    {
+        out.println("<h1>Insert question:</h1>");
+        out.println("<br>");
+        out.println("<input type=\"text\" name=\"question\">");
+    }
+    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        processRequest(request, response);
     }
 
     @Override
