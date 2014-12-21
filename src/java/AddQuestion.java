@@ -66,7 +66,7 @@ public class AddQuestion extends HttpServlet {
                 
                 out.println("</head>");
                 out.println("<body>");
-                out.println("<form name=\"showViewQuestionToAdd\" Action=\"AddQuestion\">");
+                out.println("<form name=\"showViewQuestionToAdd\" Action=\"AddQuestion\" onsubmit=\"return(validateForm());\">");
                 
                 HiddenInputViewForMultiplePossibleQuestion(out, request);
                 out.println("<h1>Insert question:</h1>");
@@ -120,7 +120,7 @@ public class AddQuestion extends HttpServlet {
                 
                 out.println("</head>");
                 out.println("<body>");
-                out.println("<form name=\"showViewQuestionToAdd\" Action=\"AddQuestion\">");
+                out.println("<form name=\"showViewQuestionToAdd\" Action=\"AddQuestion\" onsubmit=\"return(validateForm());\">");
                 
                 SetViewByQuestionType(questionType, out, request);
 
@@ -163,7 +163,7 @@ public class AddQuestion extends HttpServlet {
             out.println("<h1>Insert count of possible answers:</h1>");
             out.println("<input type=\"text\" name=\"count\" width=\"400\" height=\"50\">");
             out.println("<br>");
-            out.println("<input type=\"submit\" value=\"Continue\" onsubmit=\"return validateForm()\" >");
+            out.println("<input type=\"submit\" value=\"Continue\">");
             
             HiddenInputView(out, request);
         }
@@ -335,9 +335,8 @@ public class AddQuestion extends HttpServlet {
     
     private void SaveView(PrintWriter out){
         out.println("<br>");
-        out.println("<input type=\"submit\" value=\"Save\" onsubmit=\"return validateForm()\" >");
+        out.println("<input type=\"submit\" value=\"Save\">");
     }
-    
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
