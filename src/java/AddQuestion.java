@@ -17,7 +17,7 @@ public class AddQuestion extends HttpServlet {
     {
         response.setContentType("text/html;charset=UTF-8");
         
-        if(request.getParameter("Lavel") == null)
+        if(request.getParameter("forSave") != null) // view to save question 
         {
             PrintWriter out = response.getWriter();
             try 
@@ -29,29 +29,80 @@ public class AddQuestion extends HttpServlet {
                 out.println("</head>");
                 out.println("<body>");
                 
-                try 
-                {
-                    AddQuestionByType(request);
-                    
-                    out.println("<form name=\"Success\">");
-                    out.println("<h1>The question has been saved</h1>");
-                    out.println("<image/>");    //noya להוסיף תמונה
-                    out.println("</form>");
-                } 
-                catch (Exception ex) 
-                {
-                    out.println("<form name=\"Failure\">");
-                    out.println("<h1>The question has not been saved</h1>");
-                    out.println("<image/>");    //noya להוסיף תמונה
-                    out.println("</form>");
+                AddQuestionByType(request);
+
+                out.println("<form name=\"Success\">");
+                out.println("<h1>The question has been saved</h1>");
+                out.println("<image/>");    //noya להוסיף תמונה
+                out.println("</form>");
+                out.println("</body>");
+                out.println("</html>");
+            }
+            catch (Exception ex) 
+            {
+                out.println("<form name=\"Failure\">");
+                out.println("<h1>The question has not been saved</h1>");
+                out.println("<image/>");    //noya להוסיף תמונה
+                out.println("</form>");
+                out.println("</body>");
+                out.println("</html>");
+            }
+            finally
+            { 
+                out.close();
+            }
+        }
+        else if(request.getParameter("count") != null) // view - for multiple
+        {
+            PrintWriter out = response.getWriter();
+            try 
+            {
+                out.println("<!DOCTYPE html>");
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>Servlet AddQuestion</title>");  
+                
+                SetJavaScriptForMultiplePossibleQuestion(out);
+                
+                out.println("</head>");
+                out.println("<body>");
+                out.println("<form name=\"showViewQuestionToAdd\" Action=\"AddQuestion\">");
+                
+                HiddenInputViewForMultiplePossibleQuestion(out, request);
+                out.println("<h1>Insert question:</h1>");
+                out.println("<input type=\"text\" name=\"question\" value=" 
+                        + request.getParameter("question") 
+                        + " width=\"400\" height=\"50\">");
+                out.println("<br>");
+                
+                out.println("   <h1>Insert possible answers:</h1>");
+                out.println("   <ol>");
+                
+                for (int i = 1; i <= Integer.parseInt(request.getParameter("count")); i++) {
+                    out.println("       <li>");
+                    out.println("           <input type=\"text\" name=\""+i+"\" width=\"400\" height=\"50\">");
+                    out.println("       </li>");
                 }
+                
+                out.println("   </ol>");
+                
+                out.println("<input type=\"hidden\" name=\"forSave\" value=\"yes\">");
+                out.println("<h1>Select answers number:</h1>");
+                out.println("<input type=\"text\" name=\"numberOfAnswer\">");
+                
+                SaveView(out);
+
+                out.println("</form>");
+                out.println("</body>");
+                out.println("</html>");
             }
             finally
             {
                 out.close();
             }
         }
-        else
+        
+        else // view - to insert question 
         {
             Level lavel = Utils.GetLevelByUserChoose((String) request.getParameter("Lavel"));
             Category category = Utils.GetCategoryByUserChoose((String) request.getParameter("Category"));
@@ -91,6 +142,7 @@ public class AddQuestion extends HttpServlet {
             QuestionView(out);
             out.println("<h1>Insert answer:</h1>");
             out.println("<input type=\"text\" name=\"openAnswer\" width=\"400\" height=\"50\">");
+            out.println("<input type=\"hidden\" name=\"forSave\" value=\"yes\">");
             SaveView(out);
         }
         else if (questionType.equals(QuestionType.YesNo))
@@ -101,30 +153,19 @@ public class AddQuestion extends HttpServlet {
             out.println("<input type=\"radio\" name=\"yesNoAnswer\" value=\"Yes\" checked>Yes");
             out.println("<br>");
             out.println("<input type=\"radio\" name=\"yesNoAnswer\" value=\"No\">No");
+            out.println("<input type=\"hidden\" name=\"forSave\" value=\"yes\">");
             SaveView(out);
         }
         else if (questionType.equals(QuestionType.MultiplePossible))
         {
-            HiddenInputView(out, request);
             QuestionView(out);
             
-            out.println("<form>");
-            out.println("   <h1>Insert possible answers:</h1>");
-            out.println("   <ol>");
-            out.println("       <li>");
-            out.println("           <input type=\"text\" name=\"1\" width=\"400\" height=\"50\">");
-            out.println("       </li>");
-            out.println("       <li>");
-            out.println("           <input type=\"text\" name=\"2\" width=\"400\" height=\"50\">");
-            out.println("       </li>");
-            out.println("   </ol>");
-            out.println("</form>");
-            // noya ליצור דינמית את הוספת האובייקטים של התשובות האפשריות
+            out.println("<h1>Insert count of possible answers:</h1>");
+            out.println("<input type=\"text\" name=\"count\" width=\"400\" height=\"50\">");
+            out.println("<br>");
+            out.println("<input type=\"submit\" value=\"Continue\" onsubmit=\"return validateForm()\" >");
             
-            out.println("<h1>Select answers number:</h1>");
-            out.println("<input type=\"text\" name=\"numberOfAnswer\">");
-            
-            SaveView(out);
+            HiddenInputView(out, request);
         }
         else
         {
@@ -165,7 +206,7 @@ public class AddQuestion extends HttpServlet {
             multiplePossibleQuestion.SetAnswer(Integer.parseInt(request.getParameter("numberOfAnswer")));
             multiplePossibleQuestion.SetQuestion(request.getParameter("question"));
             
-            for (int i = 1; i <= request.getParameterMap().size()-2; i++)  // noya מועד לפורענות map
+            for (int i = 1; i <= Integer.parseInt(request.getParameter("count")); i++)
             {
                 if(request.getParameter(Integer.toString(i)) != null &&
                         !request.getParameter(Integer.toString(i)).isEmpty())
@@ -194,11 +235,11 @@ public class AddQuestion extends HttpServlet {
                     "    var x = document.forms[\"showViewQuestionToAdd\"][\"question\"].value;\n" +
                     "    var y = document.forms[\"showViewQuestionToAdd\"][\"openAnswer\"].value;\n" +
                     "    if (x==null || x==\"\") {\n" +
-                    "        alert(\"Question feild must be filled out\");\n" +
+                    "        alert(\"Question field must be filled out\");\n" +
                     "        return false;\n" +
                     "    }\n" +
                     "    if (y==null || y==\"\") {\n" +
-                    "        alert(\"Answer feild must be filled out\");\n" +
+                    "        alert(\"Answer field must be filled out\");\n" +
                     "        return false;\n" +
                     "    }\n" +
                     "}\n" +
@@ -210,7 +251,7 @@ public class AddQuestion extends HttpServlet {
                     "function validateForm() {\n" +
                     "    var x = document.forms[\"showViewQuestionToAdd\"][\"question\"].value;\n" +
                     "    if (x==null || x==\"\") {\n" +
-                    "        alert(\"Question feild must be filled out\");\n" +
+                    "        alert(\"Question field must be filled out\");\n" +
                     "        return false;\n" +
                     "    }\n" +
                     "}\n" +
@@ -221,32 +262,58 @@ public class AddQuestion extends HttpServlet {
             out.println("<script>\n" +
                     "function validateForm() {\n" +
                     "    var x = document.forms[\"showViewQuestionToAdd\"][\"question\"].value;\n" +
-                    "    var y = document.forms[\"showViewQuestionToAdd\"][\"numberOfAnswer\"].value;\n" +
-                    "    var a = document.forms[\"showViewQuestionToAdd\"][\"1\"].value;\n" +
-                    "    var b = document.forms[\"showViewQuestionToAdd\"][\"2\"].value;\n" +
+                    "    var y = document.forms[\"showViewQuestionToAdd\"][\"count\"].value;\n" +
                     "    if (x==null || x==\"\") {\n" +
-                    "        alert(\"Question feild must be filled out\");\n" +
+                    "        alert(\"Question field must be filled out\");\n" +
                     "        return false;\n" +
                     "    }\n" +
                     "    if (y==null || y==\"\") {\n" +
-                    "        alert(\"Answer feild must be filled out\");\n" +
-                    "        return false;\n" +
-                    "    }\n" +
-                    "    if (a==null || a==\"\") {\n" +
-                    "        alert(\"First possible answer feild must be filled out\");\n" +
-                    "        return false;\n" +
-                    "    }\n" +
-                    "    if (b==null || b==\"\") {\n" +
-                    "        alert(\"Second possible answer feild must be filled out\");\n" +
+                    "        alert(\"Possible answer count field must be filled out\");\n" +
                     "        return false;\n" +
                     "    }\n" +
                     "    if (!isNaN(parseFloat(y)) && isFinite(y)) {\n" +
-                    "        alert(\"Answer feild must be numeric\");\n" +
+                    "        alert(\"Possible answer count field must be numeric\");\n" +
+                    "        return false;\n" +
+                    "    }\n" +
+                    "    if (y < 2) {\n" +
+                    "        alert(\"Possible answer count must be bigger the 1\");\n" +
                     "        return false;\n" +
                     "    }\n" +
                     "}\n" +
                     "</script>");
         }
+    }
+    
+    private void SetJavaScriptForMultiplePossibleQuestion(final PrintWriter out) {
+    
+        out.println("<script>\n" +
+                    "function validateForm() {\n" +
+                    "    var x = document.forms[\"showViewQuestionToAdd\"][\"question\"].value;\n" +
+                    "    var y = document.forms[\"showViewQuestionToAdd\"][\"numberOfAnswer\"].value;\n" +
+                    "    var a = document.forms[\"showViewQuestionToAdd\"][\"1\"].value;\n" +
+                    "    var b = document.forms[\"showViewQuestionToAdd\"][\"2\"].value;\n" +
+                    "    if (x==null || x==\"\") {\n" +
+                    "        alert(\"Question field must be filled out\");\n" +
+                    "        return false;\n" +
+                    "    }\n" +
+                    "    if (y==null || y==\"\") {\n" +
+                    "        alert(\"Answer field must be filled out\");\n" +
+                    "        return false;\n" +
+                    "    }\n" +
+                    "    if (a==null || a==\"\") {\n" +
+                    "        alert(\"First possible answer field must be filled out\");\n" +
+                    "        return false;\n" +
+                    "    }\n" +
+                    "    if (b==null || b==\"\") {\n" +
+                    "        alert(\"Second possible answer field must be filled out\");\n" +
+                    "        return false;\n" +
+                    "    }\n" +
+                    "    if (!isNaN(parseFloat(y)) && isFinite(y)) {\n" +
+                    "        alert(\"Answer field must be numeric\");\n" +
+                    "        return false;\n" +
+                    "    }\n" +
+                    "}\n" +
+                    "</script>");
     }
 
     private void QuestionView(PrintWriter out){
@@ -258,6 +325,12 @@ public class AddQuestion extends HttpServlet {
     private void HiddenInputView(PrintWriter out, HttpServletRequest request){
         out.println("<input type=\"hidden\" name=\"Level\" value=\""+request.getParameter("Lavel")+"\">");
         out.println("<input type=\"hidden\" name=\"Category\" value=\""+request.getParameter("Category")+"\">");
+    }
+    
+    private void HiddenInputViewForMultiplePossibleQuestion(PrintWriter out, HttpServletRequest request){
+        out.println("<input type=\"hidden\" name=\"Level\" value=\""+request.getParameter("Lavel")+"\">");
+        out.println("<input type=\"hidden\" name=\"Category\" value=\""+request.getParameter("Category")+"\">");
+        out.println("<input type=\"hidden\" name=\"count\" value=\""+request.getParameter("count")+"\">");
     }
     
     private void SaveView(PrintWriter out){
